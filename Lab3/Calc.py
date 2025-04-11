@@ -1,5 +1,5 @@
-from SDNF.ParserSDNF import parse_sdnf
-from SKNF.ParseSKNF import parse_sknf
+from ParserSDNF import parse_sdnf
+from ParseSKNF import parse_sknf
 def count_matches(first: str, second: str)->int:
     if len(first) == len(second):
         matches = len(first)
@@ -28,8 +28,8 @@ def calc_iteration(parsed: dict)-> dict:
     result = parsed.copy()
     elems = list(result.keys())
     all_ads = 0
-    matches_needed = len(elems[0])-1
     for i in range(len(elems)-1):
+        matches_needed = len(elems[i])-1
         for j in range(i+1,len(elems)):
             if count_matches(elems[i],elems[j]) == matches_needed:
                 adhessed_elem = adhesion(elems[i],elems[j])
@@ -66,6 +66,3 @@ def calc_SKNF(expression: str):
         else: 
             break
     return iterations
-
-
-

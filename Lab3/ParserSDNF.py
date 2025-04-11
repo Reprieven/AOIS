@@ -15,6 +15,16 @@ def separate_terms_sdnf(expression: str)->List[str]:
             close_index = -1
     return result
 
+def delete_multiple(terms: List[str]) -> List[str]:
+    result = []
+    for term in terms:
+        current_elem = ""
+        for char in term:
+            if char.isalpha() or char == "¬":
+                current_elem += char
+        result.append(current_elem)
+    return result
+
 def change_inversion(terms: List[str])->List[str]:
     terms_no_inversion = []
     for elem in terms:
@@ -37,7 +47,8 @@ def change_inversion(terms: List[str])->List[str]:
 def parse_sdnf(expression: str)->List[str]:
     parsed = {}
     separated = separate_terms_sdnf(expression)
-    changed = change_inversion(separated)
+    multiple_deleted = delete_multiple(separated)
+    changed = change_inversion(multiple_deleted)
     for elem in changed: 
         parsed[elem] = 0
     return parsed

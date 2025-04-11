@@ -1,8 +1,7 @@
-from ValueVars import all_vars
-from Parse import parser
-from Operations import *
+from lab2.ValueVars import all_vars
+from lab2.Parse import parser
+from lab2.Operations import *
 from typing import List
-
 def max_precedence(expr):
     max = -1
     for element in expr:
@@ -39,7 +38,7 @@ def find_value(expr) -> int:
                 result = apply_operator(op, first, second)
                 expr[i - 1:i + 2] = [result]
                 break
-    return expr[0]
+    return expr[0] if expr else 0
 
 def change_to_int(exp_parsed: List[str], truth_table: dict,iteration: int):
     exp_int_parsed = exp_parsed.copy()

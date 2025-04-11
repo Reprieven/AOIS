@@ -1,9 +1,10 @@
 from TableCalcMethod import *
-from SDNF.ParserSDNF import separate_terms_sdnf
-from SKNF.ParseSKNF import separate_terms_sknf, delete_plus
-from CalcMethod import calc_SDNF,calc_SKNF
+from ParserSDNF import separate_terms_sdnf
+from ParseSKNF import separate_terms_sknf, delete_plus
+from Calc import calc_SDNF,calc_SKNF
 from ICalcMethod import replace_upper_case_with_inversion, add_disjunction
 from prettytable import PrettyTable
+
 
 def show_table_sdnf(expression: str): 
     table = PrettyTable()

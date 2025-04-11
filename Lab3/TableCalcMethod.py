@@ -1,7 +1,11 @@
-from CalcMethod import calc_SDNF, calc_SKNF
+from Calc import calc_SDNF, calc_SKNF
 from typing import List
 def contains_substring(main_string, substring):
-    return substring in main_string
+    is_substr = 0
+    for elem in substring:
+        if elem in main_string:
+            is_substr+=1
+    return is_substr == len(substring)
 
 def x_count(arr1,arr2):
     x_count1 = 0
@@ -26,15 +30,13 @@ def arrays_contain(arr1, arr2):
             return None
     return sub_arr
         
-def remove_by_value(input_dict, value_to_remove):
-    keys_to_remove = []
-
-    for key, value in input_dict.items():
-        if value == value_to_remove:
-            keys_to_remove.append(key)
-
-    for key in keys_to_remove:
-        del input_dict[key]
+def remove_unnecessary(input_dict, keys_to_keep):
+    result = {}
+    for key in input_dict.keys():
+        if key in keys_to_keep:
+            result[key] = input_dict[key]
+    return result
+    
 
 def form_table_sdnf(expression: str)->dict:
     iterations = calc_SDNF(expression)
@@ -52,21 +54,39 @@ def form_table_sdnf(expression: str)->dict:
             index += 1
     return res_elements
 
+def minimal_set_cover(table: dict):
+    all_positions = set()
+    for key, value in table.items():
+        for i, v in enumerate(value):
+            if v == 'X':
+                all_positions.add(i)
+
+    cover_map = {key: {i for i, v in enumerate(value) if v == 'X'} for key, value in table.items()}
+
+    selected_sets = []
+    uncovered_positions = all_positions.copy()
+
+    while uncovered_positions:
+        best_set = None
+        best_coverage = set()
+
+        for key, covered_positions in cover_map.items():
+            coverage = covered_positions & uncovered_positions 
+            if len(coverage) > len(best_coverage):
+                best_set = key
+                best_coverage = coverage
+
+        selected_sets.append(best_set)
+        uncovered_positions -= best_coverage
+
+    return selected_sets
+
 def table_calc_sdnf(expression: str):
     table = form_table_sdnf(expression)
-    keys = list(table.keys()) 
+    minimal_elements = minimal_set_cover(table)
+    minimize_table = remove_unnecessary(table,minimal_elements)
 
-    for i in range(len(keys) - 1):
-        for j in range(i + 1, len(keys)):
-            value_i = table.get(keys[i])
-            value_j = table.get(keys[j])
-            
-            if value_i is not None and value_j is not None:
-                sub_array = arrays_contain(value_i, value_j)
-            if sub_array:
-                remove_by_value(table, sub_array)
-
-    return table
+    return minimize_table
 
 def form_table_sknf(expression: str)->dict:
     iterations = calc_SKNF(expression)
@@ -86,14 +106,8 @@ def form_table_sknf(expression: str)->dict:
 
 def table_calc_sknf(expression: str):
     table = form_table_sknf(expression)
-    keys = list(table.keys()) 
-
-    for i in range(len(keys) - 1):
-        for j in range(i + 1, len(keys)):
-            sub_array = arrays_contain(table[keys[i]], table[keys[j]])
-            if sub_array:
-                remove_by_value(table, sub_array)
-
-    return table
+    minimal_elements = minimal_set_cover(table)
+    minimize_table = remove_unnecessary(table,minimal_elements)
+    return minimize_table
 
     
