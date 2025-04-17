@@ -416,13 +416,16 @@ def make_sdnf(expression, vars:List[str]):
     separated_cols = min_cover_separated[0]
     separated_rows = min_cover_separated[1]
     start_end_array = []
-    for elem in separated_cols:
-        start_end_array.append([elem[1], find_end_column(elem)])
-    for elem in separated_rows:
-        start_end_array.append([elem[1], find_end_row(elem)])
-    vars_col_str = "".join(vars_col)
-    vars_row_str = "".join(vars_row)
-    impl = get_minimal_dnf(start_end_array, vars_col_str, vars_row_str)
+    if separated_cols and separated_rows:
+        for elem in separated_cols:
+            start_end_array.append([elem[1], find_end_column(elem)])
+        for elem in separated_rows:
+            start_end_array.append([elem[1], find_end_row(elem)])
+        vars_col_str = "".join(vars_col)
+        vars_row_str = "".join(vars_row)
+        impl = get_minimal_dnf(start_end_array, vars_col_str, vars_row_str)
+    else:
+        impl = ''
     result = sdnf_karno(sdnf, impl)
     return result
 
@@ -449,13 +452,16 @@ def make_sknf(expression, vars:List[str]):
     separated_cols = min_cover_separated[0]
     separated_rows = min_cover_separated[1]
     start_end_array = []
-    for elem in separated_cols:
-        start_end_array.append([elem[1], find_end_column(elem)])
-    for elem in separated_rows:
-        start_end_array.append([elem[1], find_end_row(elem)])
-    vars_col_str = "".join(vars_col)
-    vars_row_str = "".join(vars_row)
-    impl = get_minimal_knf(start_end_array, vars_col_str, vars_row_str)
+    if separated_cols and separated_rows:
+        for elem in separated_cols:
+            start_end_array.append([elem[1], find_end_column(elem)])
+        for elem in separated_rows:
+            start_end_array.append([elem[1], find_end_row(elem)])
+        vars_col_str = "".join(vars_col)
+        vars_row_str = "".join(vars_row)
+        impl = get_minimal_knf(start_end_array, vars_col_str, vars_row_str)
+    else:
+        impl = ''
     result = sknf_karno(sknf, impl)
     return result
 
