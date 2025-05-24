@@ -15,5 +15,5 @@ class TestMakeMatrix(unittest.TestCase):
                       [0,1,0,0],
                       [1,1,0,0],
                       [1,1,1,0]]
-        self.assertListEqual(matrix, matrix_col)
+        self.assertListEqual(make_matrix_col(matrix), matrix_col)
     
